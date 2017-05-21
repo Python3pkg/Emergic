@@ -6,7 +6,7 @@ Author: David Pierre Leibovitz (C) 2008-2010
 
 dbgTraceSched = False           # Determine whether scheduling should be traced.
 
-from entity import Entity       # Common (hierarchical named) debugging support
+from .entity import Entity       # Common (hierarchical named) debugging support
     
 ##################################################################################################################################
 class Network(Entity):
@@ -169,15 +169,15 @@ class Network(Entity):
         """
 
         if not headers and not network and not units and not links and not ports and not values:
-            self.dbgPrint(headers=1, values=1); print
-            self.dbgPrint(headers=2, values=1); print
-            self.dbgPrint(headers=0, values=1); print
+            self.dbgPrint(headers=1, values=1); print()
+            self.dbgPrint(headers=2, values=1); print()
+            self.dbgPrint(headers=0, values=1); print()
             return
 
-        if   headers==1: print "Time ",
-        elif headers==2: print "Ticks",
+        if   headers==1: print("Time ", end=' ')
+        elif headers==2: print("Ticks", end=' ')
         elif (network == 2) and (self.time % self.dbgWinSize): return     # Not in window
-        else:            print "%5d" % self.time,
+        else:            print("%5d" % self.time, end=' ')
 
         if units or ports or links or values:
             for unit in self.dbgUnits:
@@ -185,24 +185,24 @@ class Network(Entity):
 
         if network:
             if   headers==1:
-                print "%-63.63s" % ("Per " + ["Tick", "Window", "Run"][network-1] + " - - Network " + self.dbgName + " - - -"),
+                print("%-63.63s" % ("Per " + ["Tick", "Window", "Run"][network-1] + " - - Network " + self.dbgName + " - - -"), end=' ')
             elif headers==2:
-                print "PTxIgn PTxHnd PRxIgn PRxHnd LTxIgn LTxHnd LRxIgn LRxHnd Compute",
+                print("PTxIgn PTxHnd PRxIgn PRxHnd LTxIgn LTxHnd LRxIgn LRxHnd Compute", end=' ')
             elif network==1:
-                print "%6d %6d %6d %6d %6d %6d %6d %6d %6d" % (
+                print("%6d %6d %6d %6d %6d %6d %6d %6d %6d" % (
                       self.dbgPortTxIgnored, self.dbgPortTxHandled, self.dbgPortRxIgnored, self.dbgPortRxHandled, 
                       self.dbgLinkTxIgnored, self.dbgLinkTxHandled, self.dbgLinkRxIgnored, self.dbgLinkRxHandled,
-                      self.dbgUnitComputes),
+                      self.dbgUnitComputes), end=' ')
             elif network==2:
-                print "%6d %6d %6d %6d %6d %6d %6d %6d %6d" % (
+                print("%6d %6d %6d %6d %6d %6d %6d %6d %6d" % (
                       self.dbgWinPortTxIgnored, self.dbgWinPortTxHandled, self.dbgWinPortRxIgnored, self.dbgWinPortRxHandled, 
                       self.dbgWinLinkTxIgnored, self.dbgWinLinkTxHandled, self.dbgWinLinkRxIgnored, self.dbgWinLinkRxHandled,
-                      self.dbgWinUnitComputes),
+                      self.dbgWinUnitComputes), end=' ')
             elif network==3:
-                print "%6d %6d %6d %6d %6d %6d %6d %6d %6d" % (
+                print("%6d %6d %6d %6d %6d %6d %6d %6d %6d" % (
                       self.dbgRunPortTxIgnored, self.dbgRunPortTxHandled, self.dbgRunPortRxIgnored, self.dbgRunPortRxHandled, 
                       self.dbgRunLinkTxIgnored, self.dbgRunLinkTxHandled, self.dbgRunLinkRxIgnored, self.dbgRunLinkRxHandled,
-                      self.dbgRunUnitComputes),            
+                      self.dbgRunUnitComputes), end=' ')            
 
 ##    #-----------------------------------------------------------------------------------------------------------------------------
 ##    def dbgDumpLinks(self, dst=False): # ??? Convert to another form. Getting rid of Entity.dbgInstances
@@ -285,8 +285,8 @@ class Network(Entity):
                 unit = port.unit
                 
                 if dbgTraceSched:
-                    print "Getting value %f9.1 at   unit %-8.8s port %-8.8s via  link %-8.8s from unit %s" % \
-                          (value.amount(), unit.dbgName, port.dbgName, link.dbgName, link.srcPort.unit.dbgName)
+                    print("Getting value %f9.1 at   unit %-8.8s port %-8.8s via  link %-8.8s from unit %s" % \
+                          (value.amount(), unit.dbgName, port.dbgName, link.dbgName, link.srcPort.unit.dbgName))
 
                 # Get rxCount & rxTime parameters for ignoreRxValue() (of this computation, not since lastGot()???)
                 rxCount = 0                         # Number of times value recieved since port first queued
@@ -297,7 +297,7 @@ class Network(Entity):
                         rxCount = port.rxCount
                 if port.ignoreRxValue(value, rxCount, rxTime, link):    # Perhaps this link connects a fast unit to a slow unit
                     link.dbgLinkRxIgnored += 1; port.dbgLinkRxIgnored += 1; unit.dbgLinkRxIgnored += 1; self.dbgLinkRxIgnored += 1
-                    if dbgTraceSched: print "Value ignored by port"
+                    if dbgTraceSched: print("Value ignored by port")
                     continue
                 link.dbgLinkRxHandled += 1; port.dbgLinkRxHandled += 1; unit.dbgLinkRxHandled += 1; self.dbgLinkRxHandled += 1
                 something = True
@@ -307,12 +307,12 @@ class Network(Entity):
                     unit.qTime = qTime
                     unit.eqTime = time
                     self.qUnits.setdefault(qTime,[]).append(unit)
-                    if dbgTraceSched: print "Unit %-8.8s queued for computation @ time %d." % (unit.dbgName, qTime)
+                    if dbgTraceSched: print("Unit %-8.8s queued for computation @ time %d." % (unit.dbgName, qTime))
                 elif qTime < unit.qTime:            # Faster port needs to requeue unit
                     self.qUnits[unit.qTime].remove(unit)
                     unit.qTime = qTime
                     self.qUnits.setdefault(qTime,[]).append(unit)
-                    if dbgTraceSched: print "Unit %-8.8s requeued for computation @ time %d." % (unit.dbgName, qTime)
+                    if dbgTraceSched: print("Unit %-8.8s requeued for computation @ time %d." % (unit.dbgName, qTime))
                 if not rxCount:
                     port.rxTimeFirst = time
                 port.rxTimeLast = time
@@ -331,7 +331,7 @@ class Network(Entity):
 
         if time in self.qUnits:                     # There are units to be dequeued at this time. If sparse change algorithm???
             for unit in self.qUnits[time]:          # Dequeue each unit
-                if dbgTraceSched: print "Unit %-8.8s starts to  compute." % unit.dbgName
+                if dbgTraceSched: print("Unit %-8.8s starts to  compute." % unit.dbgName)
                 unit.qTime = 0                      # Indicate that unit has been dequeued
                 unit.eqTime = 0
                 unit.compute()
@@ -362,13 +362,13 @@ if __name__ == "__main__":
         Emergic.Link(u1.po, u2.pi, name="L1")
         Emergic.Link(u1.po, u3.pi, name="L2", TD=3)
 
-        n.dbgPrint(headers=1, values=1); print
-        n.dbgPrint(headers=2, values=1); print
-        n.dbgPrint(headers=0, values=1); print  # Time=0
+        n.dbgPrint(headers=1, values=1); print()
+        n.dbgPrint(headers=2, values=1); print()
+        n.dbgPrint(headers=0, values=1); print()  # Time=0
 
         for t in range(0,9):
             u1.po.setValue(Emergic.Value(t,t))
             if n.tick():
-                n.dbgPrint(headers=0, values=1); print
+                n.dbgPrint(headers=0, values=1); print()
             
     _test()

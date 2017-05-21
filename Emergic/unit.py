@@ -4,7 +4,7 @@ I define a computational Unit of an Emergic Network.
 Author: David Pierre Leibovitz (C) 2008-2010
 """
 
-from entity import Entity       # Common (hierarchical named) debugging support
+from .entity import Entity       # Common (hierarchical named) debugging support
                         
 ##################################################################################################################################
 class Unit(Entity):
@@ -139,9 +139,9 @@ class Unit(Entity):
         """
 
         if not headers and not units and not links and not ports and not links and not values:
-            self.dbgPrint(headers=1, values=1); print
-            self.dbgPrint(headers=2, values=1); print
-            self.dbgPrint(headers=0, values=1); print
+            self.dbgPrint(headers=1, values=1); print()
+            self.dbgPrint(headers=2, values=1); print()
+            self.dbgPrint(headers=0, values=1); print()
             return
 
         if ports or links or values:
@@ -150,10 +150,10 @@ class Unit(Entity):
 
         if units:
             if   headers==1:
-                print "%-55.55s" % ("Unit " + self.dbgName + " - - - - - -"), 
+                print("%-55.55s" % ("Unit " + self.dbgName + " - - - - - -"), end=' ') 
             elif headers==2:
-                print "LTxIgn LTxHnd LRxIgn LRxHnd PTxIgn PTxHnd PRxIgn PRxHnd",
+                print("LTxIgn LTxHnd LRxIgn LRxHnd PTxIgn PTxHnd PRxIgn PRxHnd", end=' ')
             else:
-                print "%6d %6d %6d %6d %6d %6d %6d %6d" % (
+                print("%6d %6d %6d %6d %6d %6d %6d %6d" % (
                     self.dbgLinkTxIgnored, self.dbgLinkTxHandled, self.dbgLinkRxIgnored, self.dbgLinkRxHandled,
-                    self.dbgPortTxIgnored, self.dbgPortTxHandled, self.dbgPortRxIgnored, self.dbgPortRxHandled),
+                    self.dbgPortTxIgnored, self.dbgPortTxHandled, self.dbgPortRxIgnored, self.dbgPortRxHandled), end=' ')

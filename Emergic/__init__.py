@@ -122,10 +122,10 @@ Author: David Pierre Leibovitz (C) 2008-2009
 
 dbgTraceSched = False        # Determine whether scheduling should be traced.
 
-from entity  import Entity
-from network import Network
-from unit    import Unit
-from port    import Port, PortFirst, PortUnique, PortSum, PortMaxAmount, PortMaxConfidence
-from link    import Link
-from value   import Value    
+from .entity  import Entity
+from .network import Network
+from .unit    import Unit
+from .port    import Port, PortFirst, PortUnique, PortSum, PortMaxAmount, PortMaxConfidence
+from .link    import Link
+from .value   import Value    
 

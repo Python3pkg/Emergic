@@ -4,8 +4,8 @@ I define a port through which values are sent or received from one computational
 Author: David Pierre Leibovitz (C) 2008-2010
 """
 
-from entity     import Entity           # Common (hierarchical named) debugging support
-from network    import dbgTraceSched    # Determine whether scheduling should be traced.
+from .entity     import Entity           # Common (hierarchical named) debugging support
+from .network    import dbgTraceSched    # Determine whether scheduling should be traced.
 
 from copy       import deepcopy         # All values within the emergic system are sent by (copied) value, not by reference
 
@@ -191,8 +191,8 @@ class Port(Entity):
             qValues.setdefault(qTime,[]).append((newValue,link))
             qCount+= 1
             if dbgTraceSched:
-                print   "Sending value %-9.9s from unit %-8.8s port %-8.8s over link %-8.8s to   unit %s" % \
-                        (str(newValue), link.srcPort.unit.dbgName, link.srcPort.dbgName, link.dbgName, link.dstPort.unit.dbgName)
+                print("Sending value %-9.9s from unit %-8.8s port %-8.8s over link %-8.8s to   unit %s" % \
+                        (str(newValue), link.srcPort.unit.dbgName, link.srcPort.dbgName, link.dbgName, link.dstPort.unit.dbgName))
 
         if not qCount:  # Either this port is not linked, or all its links are at capacity. Its value has not been deliverred
             self.dbgPortRxIgnored += 1; unit.dbgPortRxIgnored += 1; ntwk.dbgPortRxIgnored += 1
@@ -294,9 +294,9 @@ class Port(Entity):
         """
 
         if not headers and not ports and not links and not links and not values:
-            self.dbgPrint(headers=1, values=1); print
-            self.dbgPrint(headers=2, values=1); print
-            self.dbgPrint(headers=0, values=1); print
+            self.dbgPrint(headers=1, values=1); print()
+            self.dbgPrint(headers=2, values=1); print()
+            self.dbgPrint(headers=0, values=1); print()
             return
             
         if links:
@@ -305,28 +305,28 @@ class Port(Entity):
 
         if ports:
             if   headers==1:
-                print "%-55.55s" % "Port - - - " + self.dbgName + " - - -",
+                print("%-55.55s" % "Port - - - " + self.dbgName + " - - -", end=' ')
             elif headers==2:
-                print "LTxIgn LTxHnd LRxIgn LRxHnd PTxIgn PTxHnd PRxIgn PRxHnd",
+                print("LTxIgn LTxHnd LRxIgn LRxHnd PTxIgn PTxHnd PRxIgn PRxHnd", end=' ')
             else: # print ports
-                print "%6d %6d %6d %6d %6d %6d %6d %6d" % (
+                print("%6d %6d %6d %6d %6d %6d %6d %6d" % (
                     self.dbgLinkTxIgnored, self.dbgLinkTxHandled, self.dbgLinkRxIgnored, self.dbgLinkRxHandled,
-                    self.dbgPortTxIgnored, self.dbgPortTxHandled, self.dbgPortRxIgnored, self.dbgPortRxHandled),
+                    self.dbgPortTxIgnored, self.dbgPortTxHandled, self.dbgPortRxIgnored, self.dbgPortRxHandled), end=' ')
 
         if values and (not self.resetValue or not self.dbgIsDst):
             if   headers==1:
-                if values==1:       print "%9.9s"      % self.unit.dbgName,
-                else:               print "%19.19s"    % ("Unit " + self.unit.dbgName),
+                if values==1:       print("%9.9s"      % self.unit.dbgName, end=' ')
+                else:               print("%19.19s"    % ("Unit " + self.unit.dbgName), end=' ')
             elif headers==2:
-                if values==1:       print "%9.9s"      % self.dbgName,
-                else:               print "%19.19s"    % ("Value " + self.dbgName),
+                if values==1:       print("%9.9s"      % self.dbgName, end=' ')
+                else:               print("%19.19s"    % ("Value " + self.dbgName), end=' ')
             else: # print values
                 if self.value:
-                    if   values==1: print "%9d"       % self.value.amount(),
-                    else:           print "%9d %9d" % (self.value.low, self.value.hgh),
+                    if   values==1: print("%9d"       % self.value.amount(), end=' ')
+                    else:           print("%9d %9d" % (self.value.low, self.value.hgh), end=' ')
                 else:
-                    if   values==1: print "     None",
-                    else:           print "     None      None",
+                    if   values==1: print("     None", end=' ')
+                    else:           print("     None      None", end=' ')
                     
 ##################################################################################################################################
 class PortFirst(Port):
@@ -375,11 +375,11 @@ class PortSum(Port):
         if not rxCount:
             #self.value = copy.copy(value)                       # It will be modified, so a fresh copy must be made !!! All values are now deepcopies!
             self.value = value
-            if self.dbg: print "0: value=", repr(value)
+            if self.dbg: print("0: value=", repr(value))
         else:
             self.value += value
             #self.value.confidence   = value.confidence          #??? What to do here?
-            if self.dbg: print "1: value=", repr(self.value), "+", repr(value)
+            if self.dbg: print("1: value=", repr(self.value), "+", repr(value))
         return False;
 
 ##################################################################################################################################

@@ -52,5 +52,5 @@ class Entity(object):
     #-----------------------------------------------------------------------------------------------------------------------------
     def error(self, text):
         """Print an error message with respect to this entity."""
-        print("Error (" + self.dbgName + "): " + text)
+        print(("Error (" + self.dbgName + "): " + text))
 

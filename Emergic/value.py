@@ -67,7 +67,7 @@ class Value():#(Entity):        # Derive off Entity???
     def __init__(self, low=-MinMaxAmount, hgh=MinMaxAmount):                                                    # of Emergic.Value
         """Construct a Value. By defaults it is a most uncertain zero."""
         if (low > hgh):
-            print "low > high"
+            print("low > high")
             self.low = hgh
             self.hgh = low
         else:
@@ -164,7 +164,7 @@ class Value():#(Entity):        # Derive off Entity???
     #-----------------------------------------------------------------------------------------------------------------------------
     def __mul__(self, other):                                                                                   # of Emergic.Value
         """Returns x * y where y is either of type Emergic.Value or int. Note that midpoints are not presrved!"""
-        if isinstance(other, int) or isinstance(other, long) or isinstance(other, float):
+        if isinstance(other, int) or isinstance(other, int) or isinstance(other, float):
             if other >= 0:
                 return Value(self.low * other, self.hgh * other)
             return     Value(self.hgh * other, self.low * other)

@@ -4,7 +4,7 @@ I define a temporal link from the output/source port of a computational unit, to
 Author: David Pierre Leibovitz (C) 2008-2010
 """
 
-from entity import Entity       # Common (hierarchical named) debugging support
+from .entity import Entity       # Common (hierarchical named) debugging support
 
 ##################################################################################################################################
 class Link(Entity):
@@ -117,7 +117,7 @@ class Link(Entity):
         
         # Remove all values enqueued via me
         if self.srcPort and self.usage:
-            for qTime, values in self.srcPort.unit.network.qValues.iteritems():
+            for qTime, values in self.srcPort.unit.network.qValues.items():
                 if not self.usage: break
                 for entry in values:
                     value, link = entry
@@ -157,20 +157,20 @@ class Link(Entity):
         """
 
         if not headers and not links:
-            self.dbgPrint(headers=1, links=3); print
-            self.dbgPrint(headers=2, links=3); print
-            self.dbgPrint(headers=0, links=3); print
+            self.dbgPrint(headers=1, links=3); print()
+            self.dbgPrint(headers=2, links=3); print()
+            self.dbgPrint(headers=0, links=3); print()
             return;
         
         if   headers==1:
-            if links==3:    print "%-27.27s"  % (self.srcPort.unit.dbgName + self.dbgName + " - - -"),
-            else:           print "%-13.13s"  % (self.srcPort.unit.dbgName + self.dbgName + " -"),
+            if links==3:    print("%-27.27s"  % (self.srcPort.unit.dbgName + self.dbgName + " - - -"), end=' ')
+            else:           print("%-13.13s"  % (self.srcPort.unit.dbgName + self.dbgName + " -"), end=' ')
         elif headers==2:
-            if   links==1:  print "LTxHnd LRxHnd",
-            elif links==2:  print "LTxIgn LRxIgn",
-            else:           print "LTxIgn LTxHnd LRxIgn LRxHnd",   
+            if   links==1:  print("LTxHnd LRxHnd", end=' ')
+            elif links==2:  print("LTxIgn LRxIgn", end=' ')
+            else:           print("LTxIgn LTxHnd LRxIgn LRxHnd", end=' ')   
         else:
-            if   links==1:  print "%6d %6d"         % (self.dbgLinkTxHandled, self.dbgLinkRxHandled),
-            elif links==2:  print "%6d %6d"         % (self.dbgLinkTxIgnored, self.dbgLinkRxIgnored),
-            else:           print "%6d %6d %6d %6d" % (self.dbgLinkTxIgnored, self.dbgLinkTxHandled, self.dbgLinkRxIgnored, self.dbgLinkRxHandled),
+            if   links==1:  print("%6d %6d"         % (self.dbgLinkTxHandled, self.dbgLinkRxHandled), end=' ')
+            elif links==2:  print("%6d %6d"         % (self.dbgLinkTxIgnored, self.dbgLinkRxIgnored), end=' ')
+            else:           print("%6d %6d %6d %6d" % (self.dbgLinkTxIgnored, self.dbgLinkTxHandled, self.dbgLinkRxIgnored, self.dbgLinkRxHandled), end=' ')
 
